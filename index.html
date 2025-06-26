@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team CV - Fullstack & DevOps Engineering</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 60px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background-color: #f1f5f9;
+            transform: skewY(-2deg);
+            z-index: 1;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: var(--dark);
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .capability-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .capability-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .capability-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .capability-card ul {
+            list-style-position: inside;
+        }
+        
+        .capability-card li {
+            margin-bottom: 8px;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .team-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .team-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .team-card-content {
+            padding: 25px;
+        }
+        
+        .team-card h3 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .team-card .position {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .team-card .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .team-card .skill {
+            background-color: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .project-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .project-card-content {
+            padding: 25px;
+        }
+        
+        .project-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .project-card .client {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .contact-info {
+            background-color: white;
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .contact-info p {
+            margin-bottom: 15px;
+        }
+        
+        .contact-info .highlight {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Team CV</div>
+            <h1>Fullstack & DevOps Engineering Team</h1>
+            <p>We are a compact, cross-functional engineering team based in Vietnam with strong capabilities in fullstack development, DevOps, AI integration, and industrial software systems.</p>
+            <a href="#contact" class="btn">Hire Our Team</a>
+        </div>
+    </header>
+    
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>Executive Summary</h2>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+                <p>We are a team of 5 engineers with backgrounds ranging from large-scale MES deployments to AI-based drone control and cloud-native infrastructure. We have successfully delivered solutions in manufacturing, SaaS platforms, and smart infrastructure.</p>
+                <p style="margin-top: 15px;">Our team combines technical excellence with strong communication skills and a problem-solving mindset. We're fluent in English (C1–C2 level) and comfortable working in international environments with academic-level technical writing and verbal communication.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="capabilities" style="background-color: #f8fafc;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Core Capabilities</h2>
+            </div>
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h3>Fullstack Development</h3>
+                    <ul>
+                        <li>React, Node.js, GraphQL</li>
+                        <li>REST APIs, PostgreSQL</li>
+                        <li>Typescript, Python</li>
+                        <li>.NET, WPF frameworks</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <h3>AI Integration</h3>
+                    <ul>
+                        <li>OpenAI, LLMs</li>
+                        <li>Prompt engineering</li>
+                        <li>Vector search</li>
+                        <li>Drone-based ML</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <h3>DevOps & Infrastructure</h3>
+                    <ul>
+                        <li>AWS (Lambda, EC2, ECS)</li>
+                        <li>OpenStack, Kubernetes</li>
+                        <li>CI/CD (GitHub Actions, Jenkins)</li>
+                        <li>Terraform infrastructure as code</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <h3>Enterprise Integration</h3>
+                    <ul>
+                        <li>MES systems</li>
+                        <li>OPC-UA, MODBUS/TCP</li>
+                        <li>Industrial device integration</li>
+                        <li>Legacy system modernization</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <h3>Security & Compliance</h3>
+                    <ul>
+                        <li>IAM, Secrets management</li>
+                        <li>SOC2/GDPR practices</li>
+                        <li>Secure coding standards</li>
+                        <li>Compliance documentation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="team">
+        <div class="container">
+            <div class="section-title">
+                <h2>Team Members</h2>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Đỗ Gia Đăng">
+                    <div class="team-card-content">
+                        <h3>Đỗ Gia Đăng</h3>
+                        <span class="position">Senior Fullstack Engineer</span>
+                        <p>Expert in .NET ecosystem with extensive experience developing MES systems and integrating industrial devices. Led digital transformation projects at Viettel Aerospace and B. Braun Vietnam.</p>
+                        <div class="skills">
+                            <span class="skill">C#</span>
+                            <span class="skill">.NET</span>
+                            <span class="skill">WPF</span>
+                            <span class="skill">OPC-UA</span>
+                            <span class="skill">SQL Server</span>
+                            <span class="skill">PowerBI</span>
+                            <span class="skill">MAUI</span>
+                            <span class="skill">Python</span>
+                            <span class="skill">React</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Nguyễn Đình Duy">
+                    <div class="team-card-content">
+                        <h3>Nguyễn Đình Duy</h3>
+                        <span class="position">DevOps Engineer & AI Researcher</span>
+                        <p>Strong background in system integration, DevOps practices, and AI-driven robotics. Co-founded DigiFact Solution and led research on intelligent rescue drones at HUST.</p>
+                        <div class="skills">
+                            <span class="skill">DevOps</span>
+                            <span class="skill">Jenkins</span>
+                            <span class="skill">ArgoCD</span>
+                            <span class="skill">OpenStack</span>
+                            <span class="skill">AI</span>
+                            <span class="skill">WPF</span>
+                            <span class="skill">SQL Server</span>
+                            <span class="skill">Docker</span>
+                            <span class="skill">Linux</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1542190891-2093d38760f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Hồ Xuân Hải">
+                    <div class="team-card-content">
+                        <h3>Hồ Xuân Hải</h3>
+                        <span class="position">System Engineer & AI/Robotics Researcher</span>
+                        <p>Experienced in OpenStack deployment, Ceph storage, and AI for robotics. Worked at FFT Solution and Sunteco with contributions in drone control and edge computing.</p>
+                        <div class="skills">
+                            <span class="skill">OpenStack</span>
+                            <span class="skill">Ceph</span>
+                            <span class="skill">Ansible</span>
+                            <span class="skill">ROS</span>
+                            <span class="skill">Kubernetes</span>
+                            <span class="skill">Unity</span>
+                            <span class="skill">SQL</span>
+                            <span class="skill">Python</span>
+                            <span class="skill">C++</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="projects" style="background-color: #f8fafc;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Relevant Projects</h2>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="MES System">
+                    <div class="project-card-content">
+                        <h3>MES System for Aerospace Factory</h3>
+                        <span class="client">Viettel Aerospace</span>
+                        <p>Designed and deployed a full-scale MES integrating with industrial tools and IoT devices. The system improved production efficiency by 23% and reduced manual reporting errors to near zero.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Cloud Infrastructure">
+                    <div class="project-card-content">
+                        <h3>Cloud Infrastructure for AI SaaS</h3>
+                        <span class="client">FFT Solution</span>
+                        <p>Built scalable cloud infrastructure and CI/CD pipelines for ML workloads and internal tooling. Implemented Kubernetes clusters that reduced infrastructure costs by 35% while improving scalability.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://images.unsplash.com/photo-1506947411487-a56738267384?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="AI-based Drone">
+                    <div class="project-card-content">
+                        <h3>AI-based Drone Search and Rescue</h3>
+                        <span class="client">ASE Lab, HUST</span>
+                        <p>Developed ML models and drone control frameworks for flood rescue scenarios. The system improved detection accuracy by 40% compared to traditional methods and was successfully tested in field conditions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact & Engagement</h2>
+            </div>
+            <div class="contact-info">
+                <p><span class="highlight">Location:</span> Vietnam (Hanoi-based, remote-capable)</p>
+                <p><span class="highlight">Languages:</span> Fluent English (C1–C2), Academic-level writing & verbal</p>
+                <p><span class="highlight">Tools:</span> GitHub, Jira, Slack, Zoom, Trello</p>
+                <p><span class="highlight">Timezone:</span> GMT+7, available 4–6 hours overlap with Europe</p>
+                <p><span class="highlight">Engagement:</span> Full-time or project-based team outsourcing</p>
+                <p style="margin-top: 30px;">We're ready to discuss how our team can help with your project. Contact us to schedule an introductory call or request more information about our capabilities.</p>
+                <a href="mailto:contact@teamcv.dev" class="btn" style="margin-top: 20px; display: inline-block;">Contact Us</a>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Team CV - Fullstack & DevOps Engineering Team. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
