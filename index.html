@@ -68,7 +68,10 @@
         }
 
         .logo i {
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             margin-right: 10px;
             font-size: 1.8rem;
         }
@@ -111,17 +114,17 @@
             width: 100%;
         }
 
-        .language-switcher {
-            display: flex;
-            align-items: center;
+        /* Language Dropdown */
+        .language-dropdown {
+            position: relative;
             margin-left: 20px;
         }
 
-        .language-btn {
+        .language-dropdown-btn {
             background: transparent;
             color: var(--light);
             border: none;
-            padding: 5px 10px;
+            padding: 8px 15px;
             border-radius: 4px;
             cursor: pointer;
             transition: var(--transition);
@@ -130,17 +133,61 @@
             align-items: center;
         }
 
-        .language-btn:hover {
+        .language-dropdown-btn:hover {
             color: var(--primary);
         }
 
-        .language-btn.active {
-            background: rgba(37, 99, 235, 0.2);
+        .language-dropdown-btn i {
+            margin-right: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .language-dropdown-btn .flag {
+            width: 20px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+
+        .language-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--dark);
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .language-dropdown:hover .language-dropdown-content {
+            display: block;
+        }
+
+        .language-option {
+            color: var(--light);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .language-option:hover {
+            background-color: rgba(37, 99, 235, 0.1);
             color: var(--primary);
         }
 
-        .language-btn i {
-            margin-right: 5px;
+        .language-option .flag {
+            width: 20px;
+            height: 15px;
+            margin-right: 10px;
+            border-radius: 2px;
         }
 
         .cta-button {
@@ -301,6 +348,7 @@
             justify-content: center;
             margin-bottom: 20px;
             font-size: 1.8rem;
+            color: white;
         }
 
         .service-card h3 {
@@ -311,6 +359,30 @@
         .service-card p {
             color: var(--gray);
             margin-bottom: 20px;
+        }
+
+        .service-features {
+            margin: 20px 0;
+            color: var(--gray);
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .service-features li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .service-features li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
         }
 
         /* Team Section */
@@ -627,13 +699,23 @@
                     <li><a href="#team" data-i18n="nav.team">Team</a></li>
                     <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
                     <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
-                    <li class="language-switcher">
-                        <button class="language-btn active" id="en-btn" data-lang="en">
-                            <i class="fas fa-language"></i> EN
+                    <li class="language-dropdown">
+                        <button class="language-dropdown-btn">
+                            <i class="fas fa-globe"></i>
+                            <img src="https://flagcdn.com/w20/gb.png" class="flag" alt="English">
+                            <span>English</span>
+                            <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 0.8rem;"></i>
                         </button>
-                        <button class="language-btn" id="vi-btn" data-lang="vi">
-                            <i class="fas fa-language"></i> VI
-                        </button>
+                        <div class="language-dropdown-content">
+                            <a href="#" class="language-option" data-lang="en">
+                                <img src="https://flagcdn.com/w20/gb.png" class="flag" alt="English">
+                                <span>English</span>
+                            </a>
+                            <a href="#" class="language-option" data-lang="vi">
+                                <img src="https://flagcdn.com/w20/vn.png" class="flag" alt="Vietnamese">
+                                <span>Tiếng Việt</span>
+                            </a>
+                        </div>
                     </li>
                 </ul>
                 <button class="cta-button" data-i18n="nav.hire">Hire Our Team</button>
@@ -695,8 +777,14 @@
                     <div class="service-icon">
                         <i class="fas fa-laptop-code"></i>
                     </div>
-                    <h3 data-i18n="services.card1.title">Fullstack Development</h3>
-                    <p data-i18n="services.card1.desc">React, Node.js, GraphQL, REST APIs, PostgreSQL, Typescript, Python, .NET, WPF frameworks</p>
+                    <h3>Custom Software Development</h3>
+                    <p>Full-stack web and mobile applications built with modern technologies and best practices.</p>
+                    <ul class="service-features">
+                        <li>React/Next.js</li>
+                        <li>Node.js/Python</li>
+                        <li>Mobile Apps</li>
+                        <li>API Development</li>
+                    </ul>
                     <a href="#" class="outline-button" data-i18n="services.learn">Learn More</a>
                 </div>
                 <div class="service-card floating delay-1">
@@ -704,7 +792,13 @@
                         <i class="fas fa-robot"></i>
                     </div>
                     <h3 data-i18n="services.card2.title">AI Integration</h3>
-                    <p data-i18n="services.card2.desc">OpenAI, LLMs, Prompt engineering, Vector search, Drone-based ML</p>
+                    <p data-i18n="services.card2.desc">Advanced artificial intelligence solutions for your business needs</p>
+                    <ul class="service-features">
+                        <li data-i18n="services.card2.feature1">OpenAI & LLMs</li>
+                        <li data-i18n="services.card2.feature2">Prompt Engineering</li>
+                        <li data-i18n="services.card2.feature3">Vector Search</li>
+                        <li data-i18n="services.card2.feature4">Drone-based ML</li>
+                    </ul>
                     <a href="#" class="outline-button" data-i18n="services.learn">Learn More</a>
                 </div>
                 <div class="service-card floating delay-2">
@@ -712,7 +806,13 @@
                         <i class="fas fa-server"></i>
                     </div>
                     <h3 data-i18n="services.card3.title">DevOps & Infrastructure</h3>
-                    <p data-i18n="services.card3.desc">AWS (Lambda, EC2, ECS), OpenStack, Kubernetes, CI/CD (GitHub Actions, Jenkins), Terraform</p>
+                    <p data-i18n="services.card3.desc">Scalable and reliable infrastructure solutions</p>
+                    <ul class="service-features">
+                        <li data-i18n="services.card3.feature1">AWS (Lambda, EC2, ECS)</li>
+                        <li data-i18n="services.card3.feature2">OpenStack & Kubernetes</li>
+                        <li data-i18n="services.card3.feature3">CI/CD Pipelines</li>
+                        <li data-i18n="services.card3.feature4">Terraform Infrastructure</li>
+                    </ul>
                     <a href="#" class="outline-button" data-i18n="services.learn">Learn More</a>
                 </div>
                 <div class="service-card floating">
@@ -720,7 +820,13 @@
                         <i class="fas fa-industry"></i>
                     </div>
                     <h3 data-i18n="services.card4.title">Enterprise Integration</h3>
-                    <p data-i18n="services.card4.desc">MES systems, OPC-UA, MODBUS/TCP, Industrial device integration, Legacy system modernization</p>
+                    <p data-i18n="services.card4.desc">Connecting your business systems seamlessly</p>
+                    <ul class="service-features">
+                        <li data-i18n="services.card4.feature1">MES Systems</li>
+                        <li data-i18n="services.card4.feature2">OPC-UA & MODBUS/TCP</li>
+                        <li data-i18n="services.card4.feature3">Industrial Device Integration</li>
+                        <li data-i18n="services.card4.feature4">Legacy System Modernization</li>
+                    </ul>
                     <a href="#" class="outline-button" data-i18n="services.learn">Learn More</a>
                 </div>
                 <div class="service-card floating delay-1">
@@ -728,7 +834,13 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <h3 data-i18n="services.card5.title">Security & Compliance</h3>
-                    <p data-i18n="services.card5.desc">IAM, Secrets management, SOC2/GDPR practices, Secure coding standards, Compliance documentation</p>
+                    <p data-i18n="services.card5.desc">Protecting your digital assets</p>
+                    <ul class="service-features">
+                        <li data-i18n="services.card5.feature1">IAM & Secrets Management</li>
+                        <li data-i18n="services.card5.feature2">SOC2/GDPR Practices</li>
+                        <li data-i18n="services.card5.feature3">Secure Coding Standards</li>
+                        <li data-i18n="services.card5.feature4">Compliance Documentation</li>
+                    </ul>
                     <a href="#" class="outline-button" data-i18n="services.learn">Learn More</a>
                 </div>
             </div>
@@ -935,16 +1047,30 @@
                 "about.p2": "Our team combines technical excellence with strong communication skills and a problem-solving mindset. We're fluent in English (C1–C2 level) and comfortable working in international environments with academic-level technical writing and verbal communication.",
                 "services.title": "Core Capabilities",
                 "services.subtitle": "We provide comprehensive IT solutions tailored to your business needs",
-                "services.card1.title": "Fullstack Development",
-                "services.card1.desc": "React, Node.js, GraphQL, REST APIs, PostgreSQL, Typescript, Python, .NET, WPF frameworks",
                 "services.card2.title": "AI Integration",
-                "services.card2.desc": "OpenAI, LLMs, Prompt engineering, Vector search, Drone-based ML",
+                "services.card2.desc": "Advanced artificial intelligence solutions for your business needs",
+                "services.card2.feature1": "OpenAI & LLMs",
+                "services.card2.feature2": "Prompt Engineering",
+                "services.card2.feature3": "Vector Search",
+                "services.card2.feature4": "Drone-based ML",
                 "services.card3.title": "DevOps & Infrastructure",
-                "services.card3.desc": "AWS (Lambda, EC2, ECS), OpenStack, Kubernetes, CI/CD (GitHub Actions, Jenkins), Terraform",
+                "services.card3.desc": "Scalable and reliable infrastructure solutions",
+                "services.card3.feature1": "AWS (Lambda, EC2, ECS)",
+                "services.card3.feature2": "OpenStack & Kubernetes",
+                "services.card3.feature3": "CI/CD Pipelines",
+                "services.card3.feature4": "Terraform Infrastructure",
                 "services.card4.title": "Enterprise Integration",
-                "services.card4.desc": "MES systems, OPC-UA, MODBUS/TCP, Industrial device integration, Legacy system modernization",
+                "services.card4.desc": "Connecting your business systems seamlessly",
+                "services.card4.feature1": "MES Systems",
+                "services.card4.feature2": "OPC-UA & MODBUS/TCP",
+                "services.card4.feature3": "Industrial Device Integration",
+                "services.card4.feature4": "Legacy System Modernization",
                 "services.card5.title": "Security & Compliance",
-                "services.card5.desc": "IAM, Secrets management, SOC2/GDPR practices, Secure coding standards, Compliance documentation",
+                "services.card5.desc": "Protecting your digital assets",
+                "services.card5.feature1": "IAM & Secrets Management",
+                "services.card5.feature2": "SOC2/GDPR Practices",
+                "services.card5.feature3": "Secure Coding Standards",
+                "services.card5.feature4": "Compliance Documentation",
                 "services.learn": "Learn More",
                 "team.title": "Team Members",
                 "team.subtitle": "Meet our talented team of engineers",
@@ -1014,16 +1140,30 @@
                 "about.p2": "Đội ngũ chúng tôi kết hợp trình độ kỹ thuật xuất sắc với kỹ năng giao tiếp mạnh mẽ và tư duy giải quyết vấn đề. Chúng tôi thành thạo tiếng Anh (trình độ C1–C2) và thoải mái làm việc trong môi trường quốc tế với khả năng viết và giao tiếp kỹ thuật ở trình độ học thuật.",
                 "services.title": "Năng lực cốt lõi",
                 "services.subtitle": "Chúng tôi cung cấp giải pháp CNTT toàn diện phù hợp với nhu cầu doanh nghiệp",
-                "services.card1.title": "Phát triển Fullstack",
-                "services.card1.desc": "React, Node.js, GraphQL, REST APIs, PostgreSQL, Typescript, Python, .NET, WPF frameworks",
                 "services.card2.title": "Tích hợp AI",
-                "services.card2.desc": "OpenAI, LLMs, Kỹ thuật prompt, Tìm kiếm vector, ML cho drone",
+                "services.card2.desc": "Giải pháp trí tuệ nhân tạo tiên tiến cho nhu cầu doanh nghiệp",
+                "services.card2.feature1": "OpenAI & LLMs",
+                "services.card2.feature2": "Kỹ thuật Prompt",
+                "services.card2.feature3": "Tìm kiếm Vector",
+                "services.card2.feature4": "ML cho Drone",
                 "services.card3.title": "DevOps & Hạ tầng",
-                "services.card3.desc": "AWS (Lambda, EC2, ECS), OpenStack, Kubernetes, CI/CD (GitHub Actions, Jenkins), Terraform",
+                "services.card3.desc": "Giải pháp hạ tầng mở rộng và đáng tin cậy",
+                "services.card3.feature1": "AWS (Lambda, EC2, ECS)",
+                "services.card3.feature2": "OpenStack & Kubernetes",
+                "services.card3.feature3": "Pipeline CI/CD",
+                "services.card3.feature4": "Hạ tầng Terraform",
                 "services.card4.title": "Tích hợp Doanh nghiệp",
-                "services.card4.desc": "Hệ thống MES, OPC-UA, MODBUS/TCP, Tích hợp thiết bị công nghiệp, Hiện đại hóa hệ thống cũ",
+                "services.card4.desc": "Kết nối hệ thống doanh nghiệp liền mạch",
+                "services.card4.feature1": "Hệ thống MES",
+                "services.card4.feature2": "OPC-UA & MODBUS/TCP",
+                "services.card4.feature3": "Tích hợp Thiết bị Công nghiệp",
+                "services.card4.feature4": "Hiện đại hóa Hệ thống Cũ",
                 "services.card5.title": "Bảo mật & Tuân thủ",
-                "services.card5.desc": "IAM, Quản lý bí mật, Thực hành SOC2/GDPR, Tiêu chuẩn mã hóa an toàn, Tài liệu tuân thủ",
+                "services.card5.desc": "Bảo vệ tài sản số của bạn",
+                "services.card5.feature1": "IAM & Quản lý Bí mật",
+                "services.card5.feature2": "Thực hành SOC2/GDPR",
+                "services.card5.feature3": "Tiêu chuẩn Mã hóa An toàn",
+                "services.card5.feature4": "Tài liệu Tuân thủ",
                 "services.learn": "Tìm hiểu thêm",
                 "team.title": "Thành viên đội ngũ",
                 "team.subtitle": "Gặp gỡ đội ngũ kỹ sư tài năng của chúng tôi",
@@ -1076,24 +1216,12 @@
 
         // Language switching functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const enBtn = document.getElementById('en-btn');
-            const viBtn = document.getElementById('vi-btn');
-            
             // Set default language to English
             let currentLang = 'en';
             
             // Function to switch language
             function switchLanguage(lang) {
                 currentLang = lang;
-                
-                // Update button states
-                if (lang === 'en') {
-                    enBtn.classList.add('active');
-                    viBtn.classList.remove('active');
-                } else {
-                    enBtn.classList.remove('active');
-                    viBtn.classList.add('active');
-                }
                 
                 // Update all translatable elements
                 const elements = document.querySelectorAll('[data-i18n]');
@@ -1103,11 +1231,34 @@
                         el.textContent = translations[lang][key];
                     }
                 });
+                
+                // Update dropdown button
+                const dropdownBtn = document.querySelector('.language-dropdown-btn');
+                if (lang === 'en') {
+                    dropdownBtn.innerHTML = `
+                        <i class="fas fa-globe"></i>
+                        <img src="https://flagcdn.com/w20/gb.png" class="flag" alt="English">
+                        <span>English</span>
+                        <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 0.8rem;"></i>
+                    `;
+                } else {
+                    dropdownBtn.innerHTML = `
+                        <i class="fas fa-globe"></i>
+                        <img src="https://flagcdn.com/w20/vn.png" class="flag" alt="Vietnamese">
+                        <span>Tiếng Việt</span>
+                        <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 0.8rem;"></i>
+                    `;
+                }
             }
             
-            // Event listeners for language buttons
-            enBtn.addEventListener('click', () => switchLanguage('en'));
-            viBtn.addEventListener('click', () => switchLanguage('vi'));
+            // Event listeners for language options
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const lang = option.getAttribute('data-lang');
+                    switchLanguage(lang);
+                });
+            });
             
             // Initialize with English
             switchLanguage('en');
