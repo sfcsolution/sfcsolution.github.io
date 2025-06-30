@@ -3,15 +3,11 @@
  * This script receives form submissions and stores them in Google Sheets
  */
 
-// Handle CORS preflight requests
+// Handle CORS preflight requests and all OPTIONS requests
 function doOptions(e) {
-  return HtmlService.createHtmlOutput()
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '3600'
-    });
+  // Return empty response with CORS headers for preflight requests
+  return HtmlService.createHtmlOutput('')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
 // Handle GET requests (for testing and CORS)
@@ -22,18 +18,36 @@ function doGet(e) {
       message: 'SFC Solution Contact Form API is running',
       timestamp: new Date().toISOString()
     }))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    });
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function doPost(e) {
   try {
+    // Check if e and e.postData exist
+    if (!e || !e.postData || !e.postData.contents) {
+      console.error('Invalid request: missing postData');
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          status: 'error',
+          message: 'Invalid request format'
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
     // Parse the JSON data from the request
-    const data = JSON.parse(e.postData.contents);
+    let data;
+    try {
+      data = JSON.parse(e.postData.contents);
+      console.log('Received data:', data);
+    } catch (parseError) {
+      console.error('Error parsing JSON:', parseError);
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          status: 'error',
+          message: 'Invalid JSON format'
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
     
     // Get the active spreadsheet (you'll need to create this first)
     const sheet = SpreadsheetApp.getActiveSheet();
@@ -86,34 +100,24 @@ function doPost(e) {
     // Send email notification (optional)
     sendEmailNotification(data);
     
-    // Return success response with CORS headers
+    // Return success response with CORS headers (using different approach)
     return ContentService
       .createTextOutput(JSON.stringify({
         status: 'success',
         message: 'Form submitted successfully'
       }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      });
+      .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
     console.error('Error processing form submission:', error);
     
-    // Return error response with CORS headers
+    // Return error response (without CORS headers for ContentService)
     return ContentService
       .createTextOutput(JSON.stringify({
         status: 'error',
-        message: 'Failed to process form submission'
+        message: 'Failed to process form submission: ' + error.toString()
       }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      });
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
