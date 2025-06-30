@@ -2345,7 +2345,7 @@
             contactForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                console.log('Form submission started...');
+                // console.log('Form submission started...');
                 
                 // Get current language for error messages
                 const getCurrentLanguage = () => {
@@ -2358,7 +2358,7 @@
                 };
                 
                 const currentLang = getCurrentLanguage();
-                console.log('Current language:', currentLang);
+                // console.log('Current language:', currentLang);
                 
                 // Basic form validation
                 const firstName = contactForm.querySelector('input[name="firstName"]')?.value?.trim() || '';
@@ -2367,11 +2367,11 @@
                 const phone = contactForm.querySelector('input[name="phone"]')?.value?.trim() || '';
                 const message = contactForm.querySelector('textarea[name="message"]')?.value?.trim() || '';
                 
-                console.log('Form data:', { firstName, lastName, email, phone: phone ? 'provided' : 'empty', message: message ? 'provided' : 'empty' });
+                // console.log('Form data:', { firstName, lastName, email, phone: phone ? 'provided' : 'empty', message: message ? 'provided' : 'empty' });
                 
                 // Validate required fields
                 if (!firstName || !lastName || !email || !message) {
-                    console.log('Validation failed: Missing required fields');
+                    // console.log('Validation failed: Missing required fields');
                     const errorText = currentLang === 'vi' ? 
                         'Vui lòng điền vào tất cả các trường bắt buộc.' : 
                         'Please fill in all required fields.';
@@ -2389,7 +2389,7 @@
                 // Validate email format
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
-                    console.log('Validation failed: Invalid email format');
+                    // console.log('Validation failed: Invalid email format');
                     const errorText = currentLang === 'vi' ? 
                         'Vui lòng nhập địa chỉ email hợp lệ.' : 
                         'Please enter a valid email address.';
@@ -2414,7 +2414,7 @@
                         const phoneRegex = /^(\+84|84|0)([235789])([0-9]{8,9})$/;
                         
                         if (!phoneRegex.test(cleanPhone)) {
-                            console.log('Validation failed: Invalid Vietnamese phone format');
+                            // console.log('Validation failed: Invalid Vietnamese phone format');
                             const errorText = translations[currentLang]['modal.phoneInvalidVN'];
                             const errorSpan = errorMessage.querySelector('span');
                             if (errorSpan) {
@@ -2448,7 +2448,7 @@
                             }
                             
                             if (!isValidPrefix) {
-                                console.log('Validation failed: Invalid Vietnamese phone prefix');
+                                // console.log('Validation failed: Invalid Vietnamese phone prefix');
                                 const errorText = translations[currentLang]['modal.phonePrefix'];
                                 const errorSpan = errorMessage.querySelector('span');
                                 if (errorSpan) {
@@ -2467,7 +2467,7 @@
                         const digitCount = cleanPhone.replace(/[^\d]/g, '').length;
                         
                         if (!generalPhoneRegex.test(phone) || digitCount < 7 || digitCount > 15) {
-                            console.log('Validation failed: Invalid general phone format, digits:', digitCount);
+                            // console.log('Validation failed: Invalid general phone format, digits:', digitCount);
                             const errorText = translations[currentLang]['modal.phoneInvalid'];
                             const errorSpan = errorMessage.querySelector('span');
                             if (errorSpan) {
@@ -2479,10 +2479,10 @@
                         }
                     }
                     
-                    console.log('Phone validation passed for language:', currentLang);
+                    // console.log('Phone validation passed for language:', currentLang);
                 }
                 
-                console.log('All validations passed, submitting form...');
+                // console.log('All validations passed, submitting form...');
                 
                 // Show loading state
                 submitBtn.classList.add('loading');
@@ -2506,7 +2506,7 @@
                 source:       'SFC Solution Website'
                 };
 
-                console.log('Sending data to Google Sheets:', data);
+                // console.log('Sending data to Google Sheets:', data);
 
                 try {
                 // ---------- Gửi request với timeout ----------
@@ -2524,13 +2524,13 @@
 
                 // ---------- Đọc luồng CHỈ MỘT LẦN ----------
                 const rawBody  = await response.text();
-                console.log('Server reply body:', rawBody);
-                console.log('Response received:', {
-                    status:     response.status,
-                    statusText: response.statusText,
-                    ok:         response.ok,
-                    headers:    Object.fromEntries(response.headers.entries())
-                });
+                // console.log('Server reply body:', rawBody);
+                // console.log('Response received:', {
+                //     status:     response.status,
+                //     statusText: response.statusText,
+                //     ok:         response.ok,
+                //     headers:    Object.fromEntries(response.headers.entries())
+                // });
 
                 // ---------- Phân tích kết quả ----------
                 let result;
@@ -2547,16 +2547,16 @@
                     throw new Error('Phản hồi bất thường: ' + rawBody);
                 }
 
-                console.log('Parsed result:', result);
+                // console.log('Parsed result:', result);
 
                 // ---------- Xử lý thành công ----------
                 if (result.status === 'success') {
                     // log analytics
-                    console.log('Contact form submitted successfully:', {
-                    timestamp: data.timestamp,
-                    projectType: data.projectType,
-                    budget: data.budget
-                    });
+                    // console.log('Contact form submitted successfully:', {
+                    // timestamp: data.timestamp,
+                    // projectType: data.projectType,
+                    // budget: data.budget
+                    // });
 
                     successMessage.style.display = 'block';
                     contactForm.reset();
@@ -2601,7 +2601,7 @@
                 errorMessage.style.display = 'block';
                 setTimeout(() => { errorMessage.style.display = 'none'; }, 8000);
                 }
-                console.log('Form submission completed.');
+                // console.log('Form submission completed.');
 
                 // Remove loading state
                 submitBtn.classList.remove('loading');
