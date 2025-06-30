@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apps Script Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .test-form { background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .result { background: #e8f5e8; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .error { background: #ffe8e8; color: #d00; }
+        .success { background: #e8f5e8; color: #080; }
+        input, button { margin: 5px; padding: 8px; }
+        button { background: #007cba; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #005a8a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Google Apps Script Test Tool</h1>
+        
+        <div class="test-form">
+            <h3>1. Test Apps Script URL</h3>
+            <p>Enter your Google Apps Script URL to test:</p>
+            <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" style="width: 100%; margin-bottom: 10px;">
+            <button onclick="testDoGet()">Test GET Request</button>
+            <button onclick="testDoPost()">Test POST Request</button>
+            <div id="testResult"></div>
+        </div>
+
+        <div class="test-form">
+            <h3>2. Current URL Status</h3>
+            <p>Testing your current URL:</p>
+            <button onclick="testCurrentUrl()">Test Current URL</button>
+            <div id="currentResult"></div>
+        </div>
+
+        <div class="test-form">
+            <h3>3. Form Submission Test</h3>
+            <p>Test actual form submission:</p>
+            <input type="text" id="testName" placeholder="Test Name" style="width: 48%;">
+            <input type="email" id="testEmail" placeholder="test@example.com" style="width: 48%;">
+            <textarea id="testMessage" placeholder="Test message" style="width: 100%; height: 60px;"></textarea>
+            <button onclick="testFormSubmission()">Submit Test Form</button>
+            <div id="formResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // Current URL from your website
+        const currentUrl = 'https://script.google.com/macros/s/AKfycbwQUAFlNaDfmw04ITcyZcvL40d_Z05HgbldjdiunqafMKyo5HWXrdB2oXgUo8JnkRRmvA/exec';
+
+        async function testDoGet() {
+            const url = document.getElementById('scriptUrl').value || currentUrl;
+            const resultDiv = document.getElementById('testResult');
+            
+            try {
+                resultDiv.innerHTML = '<p>Testing GET request...</p>';
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h4>GET Test Success!</h4>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h4>GET Test Failed</h4>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testDoPost() {
+            const url = document.getElementById('scriptUrl').value || currentUrl;
+            const resultDiv = document.getElementById('testResult');
+            
+            const testData = {
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                message: 'This is a test submission',
+                timestamp: new Date().toISOString(),
+                source: 'Test Tool'
+            };
+
+            try {
+                resultDiv.innerHTML = '<p>Testing POST request...</p>';
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h4>POST Test Success!</h4>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h4>POST Test Failed</h4>
+                        <p>Error: ${error.message}</p>
+                        <p>This is likely a CORS error - update your Apps Script with Code-Fixed.gs</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testCurrentUrl() {
+            const resultDiv = document.getElementById('currentResult');
+            
+            try {
+                resultDiv.innerHTML = '<p>Testing current URL...</p>';
+                const response = await fetch(currentUrl);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h4>Current URL Works!</h4>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h4>Current URL Failed</h4>
+                        <p>Error: ${error.message}</p>
+                        <p><strong>Action needed:</strong> Update your Apps Script with Code-Fixed.gs content</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testFormSubmission() {
+            const url = document.getElementById('scriptUrl').value || currentUrl;
+            const resultDiv = document.getElementById('formResult');
+            
+            const formData = {
+                firstName: document.getElementById('testName').value || 'Test',
+                lastName: 'User',
+                email: document.getElementById('testEmail').value || 'test@example.com',
+                message: document.getElementById('testMessage').value || 'Test message',
+                timestamp: new Date().toISOString(),
+                source: 'Test Tool'
+            };
+
+            try {
+                resultDiv.innerHTML = '<p>Submitting form...</p>';
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h4>Form Submission Success!</h4>
+                        <p>Check your Google Sheet for the new entry.</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h4>Form Submission Failed</h4>
+                        <p>Error: ${error.message}</p>
+                        <p><strong>Fix:</strong> Update your Apps Script with Code-Fixed.gs and redeploy</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-populate the URL field
+        document.getElementById('scriptUrl').value = currentUrl;
+    </script>
+</body>
+</html>
