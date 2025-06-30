@@ -2490,158 +2490,118 @@
                 successMessage.style.display = 'none';
                 errorMessage.style.display = 'none';
 
-                // Get form data
+                // ---------- Thu thập dữ liệu từ form ----------
                 const formData = new FormData(contactForm);
                 const data = {
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone') || 'Not provided',
-                    company: formData.get('company') || 'Not provided',
-                    projectType: formData.get('projectType') || 'Not specified',
-                    budget: formData.get('budget') || 'Not specified',
-                    timeline: formData.get('timeline') || 'Not specified',
-                    message: formData.get('message'),
-                    timestamp: new Date().toISOString(),
-                    source: 'SFC Solution Website'
+                firstName:    formData.get('firstName'),
+                lastName:     formData.get('lastName'),
+                email:        formData.get('email'),
+                phone:        formData.get('phone')        || 'Not provided',
+                company:      formData.get('company')      || 'Not provided',
+                projectType:  formData.get('projectType')  || 'Not specified',
+                budget:       formData.get('budget')       || 'Not specified',
+                timeline:     formData.get('timeline')     || 'Not specified',
+                message:      formData.get('message'),
+                timestamp:    new Date().toISOString(),
+                source:       'SFC Solution Website'
                 };
-                
+
                 console.log('Sending data to Google Sheets:', data);
 
                 try {
-                    // Add detailed request logging
-                    console.log('Making request to:', scriptURL);
-                    console.log('Request payload:', JSON.stringify(data, null, 2));
-                    
-                    // Send to Google Sheets with timeout and retry logic
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 30000); // Increased to 15 seconds
-                    
-                    const response = await fetch(scriptURL, {
-                        method:   'POST',
-                        redirect: 'follow',                         // <- Apps Script trả 302
-                        headers:  { 'Content-Type': 'text/plain;charset=utf-8' }, // <- simple request
-                        body:     JSON.stringify(data),
-                        signal:   controller.signal
-                    });
-                    clearTimeout(timeoutId);
-                    const text = await response.text();           // GAS trả text
-                    console.log('Server reply body:', text);
-                    console.log('Response received:', {
-                        status:     response.status,
-                        statusText: response.statusText,
-                        ok:         response.ok,
-                        headers:    Object.fromEntries(response.headers.entries())
-                    });
+                // ---------- Gửi request với timeout ----------
+                const controller = new AbortController();
+                const timeoutId  = setTimeout(() => controller.abort(), 30000); // 30 giây
 
-                    
+                const response = await fetch(scriptURL, {
+                    method:   'POST',
+                    redirect: 'follow',                // Apps Script luôn 302 -> googleusercontent
+                    headers:  { 'Content-Type': 'text/plain' }, // simple CORS – KHÔNG charset!
+                    body:     JSON.stringify(data),
+                    signal:   controller.signal
+                });
+                clearTimeout(timeoutId);
 
-                    // Check if response is successful
-                    if (response.ok) {
-                        let result;
-                        const contentType = response.headers.get('content-type');
-                        
-                        if (contentType && contentType.includes('application/json')) {
-                            result = await response.json();
-                        } else {
-                            // Sometimes Google Apps Script returns text instead of JSON
-                            const textResult = await response.text();
-                            console.log('Response text:', textResult);
-                            
-                            // Try to parse as JSON, fallback to treating as success if it contains success indicators
-                            try {
-                                result = JSON.parse(textResult);
-                            } catch (parseError) {
-                                console.log('Response is not JSON, treating as success if contains success indicators');
-                                if (textResult.toLowerCase().includes('success') || textResult.toLowerCase().includes('ok') || response.status === 200) {
-                                    result = { status: 'success', message: 'Form submitted successfully' };
-                                } else {
-                                    throw new Error('Invalid response format: ' + textResult);
-                                }
-                            }
-                        }
-                        
-                        console.log('Parsed result:', result);
-                        
-                        if (result.status === 'success' || result.success || response.status === 200) {
-                            // Success - log for analytics
-                            console.log('Contact form submitted successfully:', {
-                                timestamp: data.timestamp,
-                                projectType: data.projectType,
-                                budget: data.budget
-                            });
-                            
-                            // Success
-                            successMessage.style.display = 'block';
-                            contactForm.reset();
-                            
-                            // Close modal after 4 seconds to give user time to read message
-                            setTimeout(() => {
-                                modal.style.display = 'none';
-                                document.body.style.overflow = 'auto';
-                                successMessage.style.display = 'none';
-                            }, 4000);
-                        } else {
-                            throw new Error(result.message || result.error || 'Form submission failed - unknown error');
-                        }
-                    } else {
-                        // Get response text for better error details
-                        const responseText = await response.text();
-                        console.error('HTTP Error Response:', responseText);
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}. Response: ${responseText}`);
+                // ---------- Đọc luồng CHỈ MỘT LẦN ----------
+                const rawBody  = await response.text();
+                console.log('Server reply body:', rawBody);
+                console.log('Response received:', {
+                    status:     response.status,
+                    statusText: response.statusText,
+                    ok:         response.ok,
+                    headers:    Object.fromEntries(response.headers.entries())
+                });
+
+                // ---------- Phân tích kết quả ----------
+                let result;
+                const cType = response.headers.get('content-type') || '';
+                if (cType.includes('application/json')) {
+                    try {
+                    result = JSON.parse(rawBody);
+                    } catch (e) {
+                    throw new Error('JSON không hợp lệ: ' + rawBody);
                     }
-                } catch (error) {
-                    console.error('Contact form error details:', {
-                        name: error.name,
-                        message: error.message,
-                        stack: error.stack
-                    });
-                    
-                    // Show more specific error message based on error type
-                    let errorText;
-                    if (error.name === 'AbortError') {
-                        console.error('Request timed out after 15 seconds');
-                        errorText = currentLang === 'vi' ? 
-                            'Yêu cầu hết thời gian chờ. Vui lòng kiểm tra kết nối và thử lại.' : 
-                            'Request timed out. Please check your connection and try again.';
-                    } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                        console.error('Network connectivity issue');
-                        errorText = currentLang === 'vi' ? 
-                            'Không thể kết nối với máy chủ. Vui lòng kiểm tra kết nối internet và thử lại.' : 
-                            'Unable to connect to server. Please check your internet connection and try again.';
-                    } else if (error.message.includes('CORS') || error.message.includes('cors')) {
-                        console.error('CORS policy issue');
-                        errorText = currentLang === 'vi' ? 
-                            'Vấn đề bảo mật trình duyệt. Vui lòng liên hệ trực tiếp qua email.' : 
-                            'Browser security issue. Please contact us directly via email.';
-                    } else if (error.message.includes('HTTP 404')) {
-                        console.error('Google Apps Script endpoint not found');
-                        errorText = currentLang === 'vi' ? 
-                            'Dịch vụ tạm thời không khả dụng. Vui lòng liên hệ trực tiếp qua email.' : 
-                            'Service temporarily unavailable. Please contact us directly via email.';
-                    } else if (error.message.includes('HTTP 403') || error.message.includes('Unauthorized')) {
-                        console.error('Permission/authorization issue');
-                        errorText = currentLang === 'vi' ? 
-                            'Vấn đề phân quyền hệ thống. Vui lòng liên hệ trực tiếp qua email.' : 
-                            'System authorization issue. Please contact us directly via email.';
-                    } else {
-                        console.error('Unknown error:', error.message);
-                        errorText = currentLang === 'vi' ? 
-                            'Có lỗi kỹ thuật xảy ra. Vui lòng thử lại sau hoặc liên hệ trực tiếp qua email: contact@digifact.vn' : 
-                            'A technical error occurred. Please try again later or contact us directly via email: contact@digifact.vn';
-                    }
-                    
-                    const errorSpan = errorMessage.querySelector('span');
-                    if (errorSpan) {
-                        errorSpan.textContent = errorText;
-                    }
-                    errorMessage.style.display = 'block';
-                    
-                    // Hide error message after 8 seconds (longer for debugging)
-                    setTimeout(() => {
-                        errorMessage.style.display = 'none';
-                    }, 8000);
+                } else if (/success|ok/i.test(rawBody) || response.ok) {
+                    result = { status: 'success', message: rawBody };
+                } else {
+                    throw new Error('Phản hồi bất thường: ' + rawBody);
                 }
+
+                console.log('Parsed result:', result);
+
+                // ---------- Xử lý thành công ----------
+                if (result.status === 'success') {
+                    // log analytics
+                    console.log('Contact form submitted successfully:', {
+                    timestamp: data.timestamp,
+                    projectType: data.projectType,
+                    budget: data.budget
+                    });
+
+                    successMessage.style.display = 'block';
+                    contactForm.reset();
+                    setTimeout(() => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    successMessage.style.display = 'none';
+                    }, 4000);
+                } else {
+                    throw new Error(result.message || 'Form submission failed');
+                }
+
+                } catch (error) {
+                // ---------- Bắt & hiển thị lỗi ----------
+                console.error('Contact form error details:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+
+                let errorText;
+                if (error.name === 'AbortError') {
+                    errorText = currentLang === 'vi'
+                    ? 'Yêu cầu quá thời gian chờ. Vui lòng kiểm tra kết nối rồi thử lại.'
+                    : 'Request timed out. Please check your connection and try again.';
+                } else if (/Failed to fetch|NetworkError/i.test(error.message)) {
+                    errorText = currentLang === 'vi'
+                    ? 'Không thể kết nối máy chủ. Kiểm tra internet rồi thử lại.'
+                    : 'Unable to connect to server. Please check your internet connection.';
+                } else if (/CORS/i.test(error.message)) {
+                    errorText = currentLang === 'vi'
+                    ? 'Vấn đề bảo mật trình duyệt (CORS). Liên hệ qua email.'
+                    : 'Browser security (CORS) issue. Please contact us via email.';
+                } else {
+                    errorText = currentLang === 'vi'
+                    ? 'Có lỗi kỹ thuật. Thử lại sau hoặc email: contact@digifact.vn'
+                    : 'Technical error. Try again later or email: contact@digifact.vn';
+                }
+
+                const span = errorMessage.querySelector('span');
+                if (span) span.textContent = errorText;
+                errorMessage.style.display = 'block';
+                setTimeout(() => { errorMessage.style.display = 'none'; }, 8000);
+                }
+                console.log('Form submission completed.');
 
                 // Remove loading state
                 submitBtn.classList.remove('loading');
