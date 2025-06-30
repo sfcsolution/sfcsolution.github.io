@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .test-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #2563eb;
+        }
+        .test-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 5px;
+            border-left: 4px solid #3b82f6;
+        }
+        .success {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+        .error {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        pre {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Contact Form Test Tool</h1>
+        <p>This tool helps you test your Google Apps Script connection and debug form submission issues.</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <button id="testBasic" class="test-button">Test Basic Connection</button>
+            <button id="testForm" class="test-button">Test Form Submission</button>
+            <button id="clearResults" class="test-button" style="background: #6b7280;">Clear Results</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Replace this with your actual Google Apps Script URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQUAFlNaDfmw04ITcyZcvL40d_Z05HgbldjdiunqafMKyo5HWXrdB2oXgUo8JnkRRmvA/exec';
+        
+        const results = document.getElementById('results');
+        
+        function addResult(title, content, type = 'info') {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `results ${type}`;
+            resultDiv.innerHTML = `
+                <h3>${title}</h3>
+                <div>${content}</div>
+            `;
+            results.appendChild(resultDiv);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function addLoading(title) {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'results';
+            resultDiv.innerHTML = `
+                <h3><span class="loading"></span> ${title}</h3>
+                <p>Testing in progress...</p>
+            `;
+            results.appendChild(resultDiv);
+            return resultDiv;
+        }
+        
+        document.getElementById('testBasic').addEventListener('click', async () => {
+            const loadingDiv = addLoading('Testing Basic Connection');
+            
+            try {
+                console.log('Testing basic connection to:', SCRIPT_URL);
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                loadingDiv.remove();
+                
+                addResult(
+                    'Basic Connection Test',
+                    `
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Headers:</strong></p>
+                        <pre>${JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2)}</pre>
+                        <p><strong>Response Body:</strong></p>
+                        <pre>${await response.text()}</pre>
+                    `,
+                    response.ok ? 'success' : 'error'
+                );
+                
+            } catch (error) {
+                loadingDiv.remove();
+                addResult(
+                    'Basic Connection Test - ERROR',
+                    `
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Error Details:</strong></p>
+                        <pre>${JSON.stringify({
+                            name: error.name,
+                            message: error.message,
+                            stack: error.stack
+                        }, null, 2)}</pre>
+                    `,
+                    'error'
+                );
+            }
+        });
+        
+        document.getElementById('testForm').addEventListener('click', async () => {
+            const loadingDiv = addLoading('Testing Form Submission');
+            
+            const testData = {
+                firstName: "Test",
+                lastName: "User",
+                email: "test@example.com",
+                phone: "+1234567890",
+                company: "Test Company",
+                projectType: "fullstack",
+                budget: "1k-5k",
+                timeline: "1-3months",
+                message: "This is a test submission from the debug tool.",
+                timestamp: new Date().toISOString(),
+                source: "Debug Tool"
+            };
+            
+            try {
+                console.log('Testing form submission with data:', testData);
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                loadingDiv.remove();
+                
+                let responseBody;
+                const contentType = response.headers.get('content-type');
+                
+                if (contentType && contentType.includes('application/json')) {
+                    responseBody = await response.json();
+                } else {
+                    responseBody = await response.text();
+                }
+                
+                addResult(
+                    'Form Submission Test',
+                    `
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Request Data:</strong></p>
+                        <pre>${JSON.stringify(testData, null, 2)}</pre>
+                        <p><strong>Response Headers:</strong></p>
+                        <pre>${JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2)}</pre>
+                        <p><strong>Response Body:</strong></p>
+                        <pre>${typeof responseBody === 'string' ? responseBody : JSON.stringify(responseBody, null, 2)}</pre>
+                    `,
+                    response.ok ? 'success' : 'error'
+                );
+                
+            } catch (error) {
+                loadingDiv.remove();
+                addResult(
+                    'Form Submission Test - ERROR',
+                    `
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Request Data:</strong></p>
+                        <pre>${JSON.stringify(testData, null, 2)}</pre>
+                        <p><strong>Error Details:</strong></p>
+                        <pre>${JSON.stringify({
+                            name: error.name,
+                            message: error.message,
+                            stack: error.stack
+                        }, null, 2)}</pre>
+                    `,
+                    'error'
+                );
+            }
+        });
+        
+        document.getElementById('clearResults').addEventListener('click', () => {
+            results.innerHTML = '';
+        });
+        
+        // Initial instructions
+        addResult(
+            'Instructions',
+            `
+                <ol>
+                    <li><strong>Test Basic Connection:</strong> Checks if your Google Apps Script URL is accessible</li>
+                    <li><strong>Test Form Submission:</strong> Sends test data to your script to verify it works</li>
+                    <li>Check the console (F12) for additional debugging information</li>
+                    <li>If tests fail, check the troubleshooting guide in CONTACT-FORM-TROUBLESHOOTING.md</li>
+                </ol>
+                <p><strong>Current Script URL:</strong> <code>${SCRIPT_URL}</code></p>
+            `
+        );
+    </script>
+</body>
+</html>
