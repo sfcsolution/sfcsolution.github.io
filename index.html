@@ -2036,6 +2036,10 @@
                 "modal.subtitle": "Let's discuss your project requirements",
                 "modal.success": "Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.",
                 "modal.error": "Sorry, there was an error sending your message. Please try again or contact us directly.",
+                "modal.phoneInvalid": "Please enter a valid phone number.",
+                "modal.phoneInvalidVN": "Please enter a valid Vietnamese phone number (e.g., +84901234567, 0901234567, or 84901234567).",
+                "modal.phonePrefix": "Please enter a valid Vietnamese phone number with correct mobile or landline prefix.",
+                "modal.phonePlaceholder": "e.g., +1234567890 or (123) 456-7890",
                 "modal.firstName": "First Name *",
                 "modal.lastName": "Last Name *",
                 "modal.email": "Email Address *",
@@ -2182,6 +2186,10 @@
                 "modal.subtitle": "Hãy thảo luận về yêu cầu dự án của bạn",
                 "modal.success": "Cảm ơn bạn! Tin nhắn đã được gửi thành công. Chúng tôi sẽ phản hồi trong vòng 24 giờ.",
                 "modal.error": "Xin lỗi, có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại hoặc liên hệ trực tiếp.",
+                "modal.phoneInvalid": "Vui lòng nhập số điện thoại hợp lệ.",
+                "modal.phoneInvalidVN": "Vui lòng nhập số điện thoại Việt Nam hợp lệ (ví dụ: +84901234567, 0901234567, hoặc 84901234567).",
+                "modal.phonePrefix": "Vui lòng nhập số điện thoại Việt Nam hợp lệ với đầu số di động hoặc cố định đúng.",
+                "modal.phonePlaceholder": "ví dụ: +84901234567 hoặc 0901234567",
                 "modal.firstName": "Tên *",
                 "modal.lastName": "Họ *",
                 "modal.email": "Địa chỉ Email *",
@@ -2226,6 +2234,12 @@
                         el.innerHTML = translations[lang][key];
                     }
                 });
+                
+                // Update phone input placeholder based on language
+                const phoneInput = document.querySelector('#phone');
+                if (phoneInput && translations[lang]['modal.phonePlaceholder']) {
+                    phoneInput.placeholder = translations[lang]['modal.phonePlaceholder'];
+                }
                 
                 // Update dropdown button
                 const dropdownBtn = document.querySelector('.language-dropdown-btn');
@@ -2319,15 +2333,42 @@
             contactForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
+                console.log('Form submission started...');
+                
+                // Get current language for error messages
+                const getCurrentLanguage = () => {
+                    // Check which language is currently active based on dropdown button content
+                    const dropdownBtn = document.querySelector('.language-dropdown-btn');
+                    if (dropdownBtn && dropdownBtn.innerHTML.includes('Tiếng Việt')) {
+                        return 'vi';
+                    }
+                    return 'en';
+                };
+                
+                const currentLang = getCurrentLanguage();
+                console.log('Current language:', currentLang);
+                
                 // Basic form validation
-                const firstName = contactForm.querySelector('input[name="firstName"]').value.trim();
-                const lastName = contactForm.querySelector('input[name="lastName"]').value.trim();
-                const email = contactForm.querySelector('input[name="email"]').value.trim();
-                const message = contactForm.querySelector('textarea[name="message"]').value.trim();
+                const firstName = contactForm.querySelector('input[name="firstName"]')?.value?.trim() || '';
+                const lastName = contactForm.querySelector('input[name="lastName"]')?.value?.trim() || '';
+                const email = contactForm.querySelector('input[name="email"]')?.value?.trim() || '';
+                const phone = contactForm.querySelector('input[name="phone"]')?.value?.trim() || '';
+                const message = contactForm.querySelector('textarea[name="message"]')?.value?.trim() || '';
+                
+                console.log('Form data:', { firstName, lastName, email, phone: phone ? 'provided' : 'empty', message: message ? 'provided' : 'empty' });
                 
                 // Validate required fields
                 if (!firstName || !lastName || !email || !message) {
-                    errorMessage.querySelector('span').textContent = 'Please fill in all required fields.';
+                    console.log('Validation failed: Missing required fields');
+                    const errorText = currentLang === 'vi' ? 
+                        'Vui lòng điền vào tất cả các trường bắt buộc.' : 
+                        'Please fill in all required fields.';
+                    const errorSpan = errorMessage.querySelector('span');
+                    if (errorSpan) {
+                        errorSpan.textContent = errorText;
+                    } else {
+                        console.error('Error span not found');
+                    }
                     errorMessage.style.display = 'block';
                     setTimeout(() => errorMessage.style.display = 'none', 3000);
                     return;
@@ -2336,11 +2377,100 @@
                 // Validate email format
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
-                    errorMessage.querySelector('span').textContent = 'Please enter a valid email address.';
+                    console.log('Validation failed: Invalid email format');
+                    const errorText = currentLang === 'vi' ? 
+                        'Vui lòng nhập địa chỉ email hợp lệ.' : 
+                        'Please enter a valid email address.';
+                    const errorSpan = errorMessage.querySelector('span');
+                    if (errorSpan) {
+                        errorSpan.textContent = errorText;
+                    }
                     errorMessage.style.display = 'block';
                     setTimeout(() => errorMessage.style.display = 'none', 3000);
                     return;
                 }
+                
+                // Validate phone number format (if provided)
+                if (phone && phone !== '') {
+                    // Remove all spaces, dashes, and dots for validation
+                    const cleanPhone = phone.replace(/[\s\-\.]/g, '');
+                    
+                    if (currentLang === 'vi') {
+                        // Vietnamese phone number validation - only for Vietnamese language
+                        // Supports: +84, 84, 0 prefixes with mobile (3,5,7,8,9) and landline (2) numbers
+                        // Mobile: 10-11 digits total, Landline: 10-11 digits total
+                        const phoneRegex = /^(\+84|84|0)([235789])([0-9]{8,9})$/;
+                        
+                        if (!phoneRegex.test(cleanPhone)) {
+                            console.log('Validation failed: Invalid Vietnamese phone format');
+                            const errorText = translations[currentLang]['modal.phoneInvalidVN'];
+                            const errorSpan = errorMessage.querySelector('span');
+                            if (errorSpan) {
+                                errorSpan.textContent = errorText;
+                            }
+                            errorMessage.style.display = 'block';
+                            setTimeout(() => errorMessage.style.display = 'none', 4000);
+                            return;
+                        }
+                        
+                        // Additional validation for specific Vietnamese mobile prefixes
+                        const mobileMatch = cleanPhone.match(/^(\+84|84|0)([3579])([0-9]{8})$/);
+                        const landlineMatch = cleanPhone.match(/^(\+84|84|0)(2)([0-9]{8,9})$/);
+                        
+                        if (!mobileMatch && !landlineMatch) {
+                            // Check for common Vietnamese mobile prefixes
+                            const validMobilePrefixes = ['32', '33', '34', '35', '36', '37', '38', '39', 
+                                                       '56', '58', '59', 
+                                                       '70', '76', '77', '78', '79', 
+                                                       '81', '82', '83', '84', '85', '86', '88', '89',
+                                                       '90', '91', '92', '93', '94', '95', '96', '97', '98', '99'];
+                            
+                            let isValidPrefix = false;
+                            const phoneWithoutCountryCode = cleanPhone.replace(/^(\+84|84)/, '0');
+                            
+                            for (const prefix of validMobilePrefixes) {
+                                if (phoneWithoutCountryCode.startsWith('0' + prefix)) {
+                                    isValidPrefix = true;
+                                    break;
+                                }
+                            }
+                            
+                            if (!isValidPrefix) {
+                                console.log('Validation failed: Invalid Vietnamese phone prefix');
+                                const errorText = translations[currentLang]['modal.phonePrefix'];
+                                const errorSpan = errorMessage.querySelector('span');
+                                if (errorSpan) {
+                                    errorSpan.textContent = errorText;
+                                }
+                                errorMessage.style.display = 'block';
+                                setTimeout(() => errorMessage.style.display = 'none', 4000);
+                                return;
+                            }
+                        }
+                    } else {
+                        // General international phone validation for non-Vietnamese languages
+                        // Accept various international formats: +1234567890, 1234567890, (123) 456-7890, etc.
+                        // Must contain at least 7 digits and no more than 15 digits (ITU-T E.164 standard)
+                        const generalPhoneRegex = /^[\+]?[\d\s\-\(\)\.]{7,20}$/;
+                        const digitCount = cleanPhone.replace(/[^\d]/g, '').length;
+                        
+                        if (!generalPhoneRegex.test(phone) || digitCount < 7 || digitCount > 15) {
+                            console.log('Validation failed: Invalid general phone format, digits:', digitCount);
+                            const errorText = translations[currentLang]['modal.phoneInvalid'];
+                            const errorSpan = errorMessage.querySelector('span');
+                            if (errorSpan) {
+                                errorSpan.textContent = errorText;
+                            }
+                            errorMessage.style.display = 'block';
+                            setTimeout(() => errorMessage.style.display = 'none', 4000);
+                            return;
+                        }
+                    }
+                    
+                    console.log('Phone validation passed for language:', currentLang);
+                }
+                
+                console.log('All validations passed, submitting form...');
                 
                 // Show loading state
                 submitBtn.classList.add('loading');
@@ -2363,6 +2493,8 @@
                     timestamp: new Date().toISOString(),
                     source: 'SFC Solution Website'
                 };
+                
+                console.log('Sending data to Google Sheets:', data);
 
                 try {
                     // Send to Google Sheets with timeout and retry logic
@@ -2412,13 +2544,23 @@
                     console.error('Contact form error:', error);
                     
                     // Show appropriate error message
+                    let errorText;
                     if (error.name === 'AbortError') {
                         console.error('Request timed out');
-                        errorMessage.querySelector('span').textContent = 'Request timed out. Please check your connection and try again.';
+                        errorText = currentLang === 'vi' ? 
+                            'Yêu cầu hết thời gian chờ. Vui lòng kiểm tra kết nối và thử lại.' : 
+                            'Request timed out. Please check your connection and try again.';
                     } else {
                         console.error('Submission error:', error.message);
+                        errorText = currentLang === 'vi' ? 
+                            'Xin lỗi, có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại hoặc liên hệ trực tiếp.' : 
+                            'Sorry, there was an error sending your message. Please try again or contact us directly.';
                     }
                     
+                    const errorSpan = errorMessage.querySelector('span');
+                    if (errorSpan) {
+                        errorSpan.textContent = errorText;
+                    }
                     errorMessage.style.display = 'block';
                     
                     // Hide error message after 5 seconds
