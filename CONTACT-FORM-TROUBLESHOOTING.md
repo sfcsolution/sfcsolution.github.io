@@ -14,6 +14,14 @@ This error typically occurs due to one of several common issues. Follow this ste
 
 **Common error messages and solutions:**
 
+### ✅ **SOLVED: CORS Policy Error** (Your Current Issue)
+**Error Message:** "Access to fetch at '...' has been blocked by CORS policy"
+**Cause:** Google Apps Script doesn't have proper CORS headers
+**Solution:** 
+1. ⚠️ **URGENT:** Update your Google Apps Script with the fixed code from `google-sheets-setup/Code.gs`
+2. **MUST REDEPLOY** your Google Apps Script (Deploy → Manage deployments → Edit → New version)
+3. Follow the detailed instructions in `CORS-FIX-INSTRUCTIONS.md`
+
 ### Error: "Failed to fetch" or "Network Error"
 **Cause:** CORS (Cross-Origin Resource Sharing) issue or network connectivity
 **Solutions:**
