@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusTech | Fullstack & DevOps Engineering Team</title>
+    <title>SFC Solution | Fullstack & DevOps Engineering Team</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
@@ -389,6 +389,7 @@
         .team {
             padding: 100px 0;
             background-color: var(--darker);
+            overflow-x: hidden;
         }
 
         .team-grid {
@@ -405,17 +406,49 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: var(--transition);
             border: 1px solid rgba(100, 116, 139, 0.2);
+            transform: translateX(100px);
+            opacity: 0;
+        }
+
+        .team-card.animate {
+            animation: slideInFromRight 0.8s ease-out forwards;
+        }
+
+        .team-card.animate:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .team-card.animate:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .team-card.animate:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .team-card.animate:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .team-card.animate:nth-child(5) {
+            animation-delay: 1s;
+        }
+
+        .team-card.animate:nth-child(6) {
+            animation-delay: 1.2s;
         }
 
         .team-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) translateX(0);
             box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
         }
 
         .team-card img {
             width: 100%;
             height: 250px;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: center;    
+            background-color: rgba(30, 41, 59, 0.3);
         }
 
         .team-card-content {
@@ -521,19 +554,79 @@
         }
 
         .about-content {
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 15px;
-            padding: 40px;
-            max-width: 800px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.6));
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 1100px;
             margin: 0 auto;
-            border: 1px solid rgba(100, 116, 139, 0.2);
+            border: 1px solid rgba(100, 116, 139, 0.3);
             text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
         }
 
-        .about-content p {
+        .about-intro {
+            margin-bottom: 50px;
+        }
+
+        .about-intro p {
             color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 0;
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        .highlight-item {
+            text-align: center;
+            padding: 30px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .highlight-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .highlight-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .highlight-item h4 {
+            color: var(--light);
             margin-bottom: 15px;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .highlight-item p {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 0;
+            line-height: 1.6;
         }
 
         /* Contact Section */
@@ -670,6 +763,17 @@
             100% { transform: translateY(0px); }
         }
 
+        @keyframes slideInFromRight {
+            0% {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
         .floating {
             animation: float 6s ease-in-out infinite;
         }
@@ -690,7 +794,7 @@
             <nav>
                 <div class="logo">
                     <i class="fas fa-code"></i>
-                    <span>NexusTech</span>
+                    <span>sfcSolution</span>
                 </div>
                 <ul class="nav-links">
                     <li><a href="#home" data-i18n="nav.home">Home</a></li>
@@ -701,7 +805,6 @@
                     <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
                     <li class="language-dropdown">
                         <button class="language-dropdown-btn">
-                            <i class="fas fa-globe"></i>
                             <img src="https://flagcdn.com/w20/gb.png" class="flag" alt="English">
                             <span>English</span>
                             <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 0.8rem;"></i>
@@ -735,11 +838,11 @@
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <div class="stat-number">5+</div>
+                        <div class="stat-number">8+</div>
                         <div class="stat-label" data-i18n="hero.stat1">Expert Engineers</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">15+</div>
+                        <div class="stat-number">5+</div>
                         <div class="stat-label" data-i18n="hero.stat2">Years Experience</div>
                     </div>
                     <div class="stat-item">
@@ -759,8 +862,32 @@
                 <p data-i18n="about.subtitle">Learn more about our team and capabilities</p>
             </div>
             <div class="about-content">
-                <p data-i18n="about.p1">We are a team of 5 engineers with backgrounds ranging from large-scale MES deployments to AI-based drone control and cloud-native infrastructure. We have successfully delivered solutions in manufacturing, SaaS platforms, and smart infrastructure.</p>
-                <p data-i18n="about.p2">Our team combines technical excellence with strong communication skills and a problem-solving mindset. We're fluent in English (C1–C2 level) and comfortable working in international environments with academic-level technical writing and verbal communication.</p>
+                <div class="about-intro">
+                    <p data-i18n="about.intro">We are a team of talented engineers with backgrounds ranging from large-scale MES deployments to AI-based drone control and cloud-native infrastructure. We have successfully delivered solutions in manufacturing, SaaS platforms, and smart infrastructure.</p>
+                </div>
+                <div class="about-highlights">
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h4 data-i18n="about.highlight1.title">Technical Expertise</h4>
+                        <p data-i18n="about.highlight1.desc">Deep knowledge across fullstack development, DevOps, AI integration, and industrial systems with proven track record in complex deployments.</p>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <h4 data-i18n="about.highlight2.title">Global Communication</h4>
+                        <p data-i18n="about.highlight2.desc">Fluent English with academic-level technical writing and verbal communication skills for seamless international collaboration.</p>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4 data-i18n="about.highlight3.title">Problem Solving</h4>
+                        <p data-i18n="about.highlight3.desc">Strong analytical mindset and creative problem-solving approach to deliver innovative solutions that exceed expectations.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -777,13 +904,13 @@
                     <div class="service-icon">
                         <i class="fas fa-laptop-code"></i>
                     </div>
-                    <h3>Custom Software Development</h3>
-                    <p>Full-stack web and mobile applications built with modern technologies and best practices.</p>
+                    <h3 data-i18n="services.card1.title">Software Development</h3>
+                    <p data-i18n="services.card1.desc">Full-stack web and mobile applications built with modern technologies.</p>
                     <ul class="service-features">
-                        <li>React/Next.js</li>
-                        <li>Node.js/Python</li>
-                        <li>Mobile Apps</li>
-                        <li>API Development</li>
+                        <li data-i18n="services.card1.feature1">React/Next.js</li>
+                        <li data-i18n="services.card1.feature2">Node.js/Python</li>
+                        <li data-i18n="services.card1.feature3">Mobile Apps</li>
+                        <li data-i18n="services.card1.feature4">API Development</li>
                     </ul>
                     <a href="#" class="outline-button" data-i18n="services.learn">Learn More</a>
                 </div>
@@ -792,7 +919,7 @@
                         <i class="fas fa-robot"></i>
                     </div>
                     <h3 data-i18n="services.card2.title">AI Integration</h3>
-                    <p data-i18n="services.card2.desc">Advanced artificial intelligence solutions for your business needs</p>
+                    <p data-i18n="services.card2.desc">Advanced artificial intelligence solutions for your business needs.</p>
                     <ul class="service-features">
                         <li data-i18n="services.card2.feature1">OpenAI & LLMs</li>
                         <li data-i18n="services.card2.feature2">Prompt Engineering</li>
@@ -806,7 +933,7 @@
                         <i class="fas fa-server"></i>
                     </div>
                     <h3 data-i18n="services.card3.title">DevOps & Infrastructure</h3>
-                    <p data-i18n="services.card3.desc">Scalable and reliable infrastructure solutions</p>
+                    <p data-i18n="services.card3.desc">Scalable and reliable infrastructure solutions for modern applications.</p>
                     <ul class="service-features">
                         <li data-i18n="services.card3.feature1">AWS (Lambda, EC2, ECS)</li>
                         <li data-i18n="services.card3.feature2">OpenStack & Kubernetes</li>
@@ -820,7 +947,7 @@
                         <i class="fas fa-industry"></i>
                     </div>
                     <h3 data-i18n="services.card4.title">Enterprise Integration</h3>
-                    <p data-i18n="services.card4.desc">Connecting your business systems seamlessly</p>
+                    <p data-i18n="services.card4.desc">Connecting your business systems seamlessly and efficiently.</p>
                     <ul class="service-features">
                         <li data-i18n="services.card4.feature1">MES Systems</li>
                         <li data-i18n="services.card4.feature2">OPC-UA & MODBUS/TCP</li>
@@ -834,12 +961,26 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <h3 data-i18n="services.card5.title">Security & Compliance</h3>
-                    <p data-i18n="services.card5.desc">Protecting your digital assets</p>
+                    <p data-i18n="services.card5.desc">Protecting your digital assets with industry-standard practices.</p>
                     <ul class="service-features">
                         <li data-i18n="services.card5.feature1">IAM & Secrets Management</li>
                         <li data-i18n="services.card5.feature2">SOC2/GDPR Practices</li>
                         <li data-i18n="services.card5.feature3">Secure Coding Standards</li>
                         <li data-i18n="services.card5.feature4">Compliance Documentation</li>
+                    </ul>
+                    <a href="#" class="outline-button" data-i18n="services.learn">Learn More</a>
+                </div>
+                <div class="service-card floating delay-2">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 data-i18n="services.card6.title">Data Analysis & Visualization</h3>
+                    <p data-i18n="services.card6.desc">Transform your data into actionable insights with advanced tools.</p>
+                    <ul class="service-features">
+                        <li data-i18n="services.card6.feature1">Power BI & Tableau</li>
+                        <li data-i18n="services.card6.feature2">Python Data Science</li>
+                        <li data-i18n="services.card6.feature3">SQL Analytics</li>
+                        <li data-i18n="services.card6.feature4">PostgreSQL, MongoDB, MySQL</li>
                     </ul>
                     <a href="#" class="outline-button" data-i18n="services.learn">Learn More</a>
                 </div>
@@ -856,7 +997,7 @@
             </div>
             <div class="team-grid">
                 <div class="team-card">
-                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Đỗ Gia Đăng">
+                    <img src="./Resource/Image/Dangdg_Full_Avatar.png" alt="Đỗ Gia Đăng">
                     <div class="team-card-content">
                         <h3>Đỗ Gia Đăng</h3>
                         <span class="position" data-i18n="team.member1.position">Senior Fullstack Engineer</span>
@@ -912,6 +1053,63 @@
                         </div>
                     </div>
                 </div>
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Hà An Huy">
+                    <div class="team-card-content">
+                        <h3>Hà An Huy</h3>
+                        <span class="position" data-i18n="team.member4.position">Senior Software Engineer</span>
+                        <p data-i18n="team.member4.desc">Backend engineer with expertise in distributed systems and Microsoft technology. Led team migration from legacy monolithic to microservices architecture. Award winner Developer of the year 2023 at NashTech.</p>
+                        <div class="skills">
+                            <span class="skill">C#</span>
+                            <span class="skill">ASP.NET</span>
+                            <span class="skill">TypeScript</span>
+                            <span class="skill">React</span>
+                            <span class="skill">MSSQL</span>
+                            <span class="skill">SQL Server</span>
+                            <span class="skill">AWS</span>
+                            <span class="skill">Docker</span>
+                            <span class="skill">Git</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Nguyễn Đức Minh">
+                    <div class="team-card-content">
+                        <h3>Nguyễn Đức Minh</h3>
+                        <span class="position" data-i18n="team.member5.position">DevOps Engineer & System Administrator</span>
+                        <p data-i18n="team.member5.desc">Emerging DevOps engineer with solid foundation in system administration, CI/CD automation, and containerization. Experienced in real-time monitoring systems and database management across manufacturing and tech environments.</p>
+                        <div class="skills">
+                            <span class="skill">Python</span>
+                            <span class="skill">C++</span>
+                            <span class="skill">Docker</span>
+                            <span class="skill">Kubernetes</span>
+                            <span class="skill">PostgreSQL</span>
+                            <span class="skill">Redis</span>
+                            <span class="skill">CI/CD</span>
+                            <span class="skill">Odoo ERP</span>
+                            <span class="skill">System Admin</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Trần Huy Hoàng">
+                    <div class="team-card-content">
+                        <h3>Trần Huy Hoàng</h3>
+                        <span class="position" data-i18n="team.member6.position">Data Engineer</span>
+                        <p data-i18n="team.member6.desc">Experienced data engineer specializing in data lakehouse architecture and streaming systems. Built Kubernetes-based data platforms with Trino, Kafka, and Iceberg, achieving significant performance improvements and cost reductions in enterprise environments.</p>
+                        <div class="skills">
+                            <span class="skill">Python</span>
+                            <span class="skill">SQL</span>
+                            <span class="skill">Kubernetes</span>
+                            <span class="skill">Kafka</span>
+                            <span class="skill">Trino</span>
+                            <span class="skill">dbt</span>
+                            <span class="skill">Airflow</span>
+                            <span class="skill">Iceberg</span>
+                            <span class="skill">MinIO</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -962,10 +1160,10 @@
             <div class="contact-info">
                 <p><span class="highlight" data-i18n="contact.location">Location:</span> <span data-i18n="contact.location.value">Vietnam (Hanoi-based, remote-capable)</span></p>
                 <p><span class="highlight" data-i18n="contact.languages">Languages:</span> <span data-i18n="contact.languages.value">Fluent English (C1–C2), Academic-level writing & verbal</span></p>
-                <p><span class="highlight" data-i18n="contact.tools">Tools:</span> <span data-i18n="contact.tools.value">GitHub, Jira, Slack, Zoom, Trello</span></p>
+                <p><span class="highlight" data-i18n="contact.tools">Tools:</span> <span data-i18n="contact.tools.value">GitHub, Jira, OpenProject, Slack, Zoom, Trello</span></p>
                 <p><span class="highlight" data-i18n="contact.timezone">Timezone:</span> <span data-i18n="contact.timezone.value">GMT+7, available 4–6 hours overlap with Europe</span></p>
                 <p><span class="highlight" data-i18n="contact.engagement">Engagement:</span> <span data-i18n="contact.engagement.value">Full-time or project-based team outsourcing</span></p>
-                <p style="margin-top: 30px;" data-i18n="contact.message">We're ready to discuss how our team can help with your project. Contact us to schedule an introductory call or request more information about our capabilities.</p>
+                <p style="margin-top: 30px;" data-i18n="contact.message">We're ready to discuss how our team can help with your project. Contact us for an introductory call or request more information about our capabilities.</p>
                 <button class="cta-button" style="margin-top: 20px;" data-i18n="contact.cta">Contact Us</button>
             </div>
         </div>
@@ -978,7 +1176,7 @@
                 <div class="footer-col">
                     <div class="logo">
                         <i class="fas fa-code"></i>
-                        <span>NexusTech</span>
+                        <span>SFC Solution</span>
                     </div>
                     <p style="margin: 20px 0; color: var(--gray);" data-i18n="footer.description">Delivering innovative IT solutions that empower businesses to thrive in the digital age.</p>
                     <div class="social-links">
@@ -1012,13 +1210,13 @@
                     <h3 data-i18n="footer.contact">Contact Us</h3>
                     <ul class="footer-links">
                         <li><i class="fas fa-map-marker-alt"></i> <span data-i18n="footer.address">Hanoi, Vietnam</span></li>
-                        <li><i class="fas fa-phone"></i> +84 123 456 789</li>
-                        <li><i class="fas fa-envelope"></i> contact@nexustech.dev</li>
+                        <li><i class="fas fa-phone"></i> (+84) 33 884 5579</li>
+                        <li><i class="fas fa-envelope"></i> contact@digifact.vn</li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 NexusTech. <span data-i18n="footer.rights">All rights reserved.</span></p>
+                <p>&copy; 2025 SFC Solution. <span data-i18n="footer.rights">All rights reserved.</span></p>
             </div>
         </div>
     </footer>
@@ -1043,34 +1241,51 @@
                 "hero.stat3": "Efficiency Gains",
                 "about.title": "Executive Summary",
                 "about.subtitle": "Learn more about our team and capabilities",
-                "about.p1": "We are a team of 5 engineers with backgrounds ranging from large-scale MES deployments to AI-based drone control and cloud-native infrastructure. We have successfully delivered solutions in manufacturing, SaaS platforms, and smart infrastructure.",
-                "about.p2": "Our team combines technical excellence with strong communication skills and a problem-solving mindset. We're fluent in English (C1–C2 level) and comfortable working in international environments with academic-level technical writing and verbal communication.",
+                "about.intro": "We are a team of talented engineers with backgrounds ranging from large-scale MES deployments to AI-based drone control and cloud-native infrastructure. We have successfully delivered solutions in manufacturing, SaaS platforms, and smart infrastructure.",
+                "about.highlight1.title": "Technical Expertise",
+                "about.highlight1.desc": "Deep knowledge across fullstack development, DevOps, AI integration, and industrial systems with proven track record in complex deployments.",
+                "about.highlight2.title": "Global Communication",
+                "about.highlight2.desc": "Fluent English with academic-level technical writing and verbal communication skills for seamless international collaboration.",
+                "about.highlight3.title": "Problem Solving",
+                "about.highlight3.desc": "Strong analytical mindset and creative problem-solving approach to deliver innovative solutions that exceed expectations.",
                 "services.title": "Core Capabilities",
                 "services.subtitle": "We provide comprehensive IT solutions tailored to your business needs",
+                "services.card1.title": "Software Development",
+                "services.card1.desc": "Full-stack web and mobile applications built with modern technologies.",
+                "services.card1.feature1": "React/Next.js",
+                "services.card1.feature2": "Node.js/Python",
+                "services.card1.feature3": "Mobile Apps",
+                "services.card1.feature4": "API Development",
                 "services.card2.title": "AI Integration",
-                "services.card2.desc": "Advanced artificial intelligence solutions for your business needs",
+                "services.card2.desc": "Advanced artificial intelligence solutions for your business needs.",
                 "services.card2.feature1": "OpenAI & LLMs",
                 "services.card2.feature2": "Prompt Engineering",
                 "services.card2.feature3": "Vector Search",
                 "services.card2.feature4": "Drone-based ML",
                 "services.card3.title": "DevOps & Infrastructure",
-                "services.card3.desc": "Scalable and reliable infrastructure solutions",
+                "services.card3.desc": "Scalable and reliable infrastructure solutions for modern applications.",
                 "services.card3.feature1": "AWS (Lambda, EC2, ECS)",
                 "services.card3.feature2": "OpenStack & Kubernetes",
                 "services.card3.feature3": "CI/CD Pipelines",
                 "services.card3.feature4": "Terraform Infrastructure",
                 "services.card4.title": "Enterprise Integration",
-                "services.card4.desc": "Connecting your business systems seamlessly",
+                "services.card4.desc": "Connecting your business systems seamlessly and efficiently.",
                 "services.card4.feature1": "MES Systems",
                 "services.card4.feature2": "OPC-UA & MODBUS/TCP",
                 "services.card4.feature3": "Industrial Device Integration",
                 "services.card4.feature4": "Legacy System Modernization",
                 "services.card5.title": "Security & Compliance",
-                "services.card5.desc": "Protecting your digital assets",
+                "services.card5.desc": "Protecting your digital assets with industry-standard practices.",
                 "services.card5.feature1": "IAM & Secrets Management",
                 "services.card5.feature2": "SOC2/GDPR Practices",
                 "services.card5.feature3": "Secure Coding Standards",
                 "services.card5.feature4": "Compliance Documentation",
+                "services.card6.title": "Data Analysis & Visualization",
+                "services.card6.desc": "Transform your data into actionable insights with advanced tools.",
+                "services.card6.feature1": "Power BI & Tableau",
+                "services.card6.feature2": "Python Data Science",
+                "services.card6.feature3": "SQL Analytics",
+                "services.card6.feature4": "PostgreSQL, MongoDB, MySQL",
                 "services.learn": "Learn More",
                 "team.title": "Team Members",
                 "team.subtitle": "Meet our talented team of engineers",
@@ -1080,6 +1295,12 @@
                 "team.member2.desc": "Strong background in system integration, DevOps practices, and AI-driven robotics. Co-founded DigiFact Solution and led research on intelligent rescue drones at HUST.",
                 "team.member3.position": "System Engineer & AI/Robotics Researcher",
                 "team.member3.desc": "Experienced in OpenStack deployment, Ceph storage, and AI for robotics. Worked at FFT Solution and Sunteco with contributions in drone control and edge computing.",
+                "team.member4.position": "Senior Software Engineer",
+                "team.member4.desc": "Backend engineer with expertise in distributed systems and Microsoft technology. Led team migration from legacy monolithic to microservices architecture. Award winner Developer of the year 2023 at NashTech.",
+                "team.member5.position": "DevOps Engineer & System Administrator",
+                "team.member5.desc": "Emerging DevOps engineer with solid foundation in system administration, CI/CD automation, and containerization. Experienced in real-time monitoring systems and database management across manufacturing and tech environments.",
+                "team.member6.position": "Data Engineer",
+                "team.member6.desc": "Experienced data engineer specializing in data lakehouse architecture and streaming systems. Built Kubernetes-based data platforms with Trino, Kafka, and Iceberg, achieving significant performance improvements and cost reductions in enterprise environments.",
                 "projects.title": "Relevant Projects",
                 "projects.subtitle": "Explore our recent projects and see how we've helped businesses thrive",
                 "projects.project1.title": "MES System for Aerospace Factory",
@@ -1093,14 +1314,14 @@
                 "contact.location": "Location:",
                 "contact.location.value": "Vietnam (Hanoi-based, remote-capable)",
                 "contact.languages": "Languages:",
-                "contact.languages.value": "Fluent English (C1–C2), Academic-level writing & verbal",
+                "contact.languages.value": "Fluent English, Academic-level writing & verbal",
                 "contact.tools": "Tools:",
-                "contact.tools.value": "GitHub, Jira, Slack, Zoom, Trello",
+                "contact.tools.value": "GitHub, Jira, OpenProject, Slack, Zoom, Trello",
                 "contact.timezone": "Timezone:",
                 "contact.timezone.value": "GMT+7, available 4–6 hours overlap with Europe",
                 "contact.engagement": "Engagement:",
                 "contact.engagement.value": "Full-time or project-based team outsourcing",
-                "contact.message": "We're ready to discuss how our team can help with your project. Contact us to schedule an introductory call or request more information about our capabilities.",
+                "contact.message": "We're ready to discuss how our team can help with your project.<br>Contact us for an introductory call or request more information about our capabilities.",
                 "contact.cta": "Contact Us",
                 "footer.description": "Delivering innovative IT solutions that empower businesses to thrive in the digital age.",
                 "footer.services": "Services",
@@ -1136,34 +1357,51 @@
                 "hero.stat3": "Cải thiện hiệu suất",
                 "about.title": "Tổng quan",
                 "about.subtitle": "Tìm hiểu thêm về đội ngũ và năng lực của chúng tôi",
-                "about.p1": "Chúng tôi là đội ngũ 5 kỹ sư với kinh nghiệm đa dạng từ triển khai hệ thống MES quy mô lớn đến điều khiển drone bằng AI và hạ tầng cloud-native. Chúng tôi đã triển khai thành công các giải pháp trong sản xuất, nền tảng SaaS và hạ tầng thông minh.",
-                "about.p2": "Đội ngũ chúng tôi kết hợp trình độ kỹ thuật xuất sắc với kỹ năng giao tiếp mạnh mẽ và tư duy giải quyết vấn đề. Chúng tôi thành thạo tiếng Anh (trình độ C1–C2) và thoải mái làm việc trong môi trường quốc tế với khả năng viết và giao tiếp kỹ thuật ở trình độ học thuật.",
+                "about.intro": "Chúng tôi là đội ngũ kỹ sư trẻ tài năng với kinh nghiệm đa dạng từ triển khai hệ thống MES quy mô lớn đến điều khiển drone bằng AI và hạ tầng cloud-native. Chúng tôi đã triển khai thành công các giải pháp trong sản xuất, nền tảng SaaS và hạ tầng thông minh.",
+                "about.highlight1.title": "Chuyên môn Kỹ thuật",
+                "about.highlight1.desc": "Kiến thức sâu rộng về phát triển fullstack, DevOps, tích hợp AI và hệ thống công nghiệp với thành tích đã được chứng minh trong các triển khai phức tạp.",
+                "about.highlight2.title": "Giao tiếp Quốc tế",
+                "about.highlight2.desc": "Thành thạo tiếng Anh với kỹ năng viết kỹ thuật và giao tiếp bằng lời nói ở trình độ học thuật để hợp tác quốc tế hiệu quả.",
+                "about.highlight3.title": "Giải quyết Vấn đề",
+                "about.highlight3.desc": "Tư duy phân tích mạnh mẽ và phương pháp giải quyết vấn đề sáng tạo để cung cấp các giải pháp đổi mới vượt trên mong đợi.",
                 "services.title": "Năng lực cốt lõi",
                 "services.subtitle": "Chúng tôi cung cấp giải pháp CNTT toàn diện phù hợp với nhu cầu doanh nghiệp",
+                "services.card1.title": "Phần mềm Tùy chỉnh",
+                "services.card1.desc": "Ứng dụng web và di động fullstack với công nghệ hiện đại.",
+                "services.card1.feature1": "React/Next.js",
+                "services.card1.feature2": "Node.js/Python",
+                "services.card1.feature3": "Ứng dụng Di động",
+                "services.card1.feature4": "Phát triển API",
                 "services.card2.title": "Tích hợp AI",
-                "services.card2.desc": "Giải pháp trí tuệ nhân tạo tiên tiến cho nhu cầu doanh nghiệp",
+                "services.card2.desc": "Giải pháp trí tuệ nhân tạo tiên tiến cho doanh nghiệp.",
                 "services.card2.feature1": "OpenAI & LLMs",
                 "services.card2.feature2": "Kỹ thuật Prompt",
                 "services.card2.feature3": "Tìm kiếm Vector",
                 "services.card2.feature4": "ML cho Drone",
                 "services.card3.title": "DevOps & Hạ tầng",
-                "services.card3.desc": "Giải pháp hạ tầng mở rộng và đáng tin cậy",
+                "services.card3.desc": "Giải pháp hạ tầng mở rộng cho ứng dụng hiện đại.",
                 "services.card3.feature1": "AWS (Lambda, EC2, ECS)",
                 "services.card3.feature2": "OpenStack & Kubernetes",
                 "services.card3.feature3": "Pipeline CI/CD",
                 "services.card3.feature4": "Hạ tầng Terraform",
                 "services.card4.title": "Tích hợp Doanh nghiệp",
-                "services.card4.desc": "Kết nối hệ thống doanh nghiệp liền mạch",
+                "services.card4.desc": "Kết nối hệ thống doanh nghiệp liền mạch và hiệu quả.",
                 "services.card4.feature1": "Hệ thống MES",
                 "services.card4.feature2": "OPC-UA & MODBUS/TCP",
                 "services.card4.feature3": "Tích hợp Thiết bị Công nghiệp",
                 "services.card4.feature4": "Hiện đại hóa Hệ thống Cũ",
                 "services.card5.title": "Bảo mật & Tuân thủ",
-                "services.card5.desc": "Bảo vệ tài sản số của bạn",
+                "services.card5.desc": "Bảo vệ tài sản số với các thực hành tiêu chuẩn ngành.",
                 "services.card5.feature1": "IAM & Quản lý Bí mật",
                 "services.card5.feature2": "Thực hành SOC2/GDPR",
                 "services.card5.feature3": "Tiêu chuẩn Mã hóa An toàn",
                 "services.card5.feature4": "Tài liệu Tuân thủ",
+                "services.card6.title": "Phân tích & Trực quan hóa Dữ liệu",
+                "services.card6.desc": "Chuyển đổi dữ liệu thành thông tin hữu ích với công cụ tiên tiến.",
+                "services.card6.feature1": "Power BI & Tableau",
+                "services.card6.feature2": "Khoa học Dữ liệu Python",
+                "services.card6.feature3": "Phân tích SQL",
+                "services.card6.feature4": "PostgreSQL, MongoDB, MySQL",
                 "services.learn": "Tìm hiểu thêm",
                 "team.title": "Thành viên đội ngũ",
                 "team.subtitle": "Gặp gỡ đội ngũ kỹ sư tài năng của chúng tôi",
@@ -1173,6 +1411,12 @@
                 "team.member2.desc": "Nền tảng vững chắc về tích hợp hệ thống, thực hành DevOps và robotics ứng dụng AI. Đồng sáng lập DigiFact Solution và dẫn dắt nghiên cứu về drone cứu hộ thông minh tại HUST.",
                 "team.member3.position": "Kỹ sư Hệ thống & Nghiên cứu AI/Robotics",
                 "team.member3.desc": "Có kinh nghiệm triển khai OpenStack, lưu trữ Ceph và AI cho robotics. Đã làm việc tại FFT Solution và Sunteco với các đóng góp trong điều khiển drone và điện toán biên.",
+                "team.member4.position": "Kỹ sư Phần mềm Cao cấp",
+                "team.member4.desc": "Kỹ sư Backend chuyên về hệ thống phân tán và công nghệ Microsoft. Đã dẫn dắt đội chuyển đổi từ kiến trúc nguyên khối cũ sang microservices. Giải thưởng Nhà phát triển xuất sắc năm 2023 tại NashTech.",
+                "team.member5.position": "Kỹ sư DevOps & Quản trị Hệ thống",
+                "team.member5.desc": "Kỹ sư DevOps mới nổi với nền tảng vững chắc trong quản trị hệ thống, tự động hóa CI/CD và containerization. Có kinh nghiệm trong các hệ thống giám sát thời gian thực và quản lý cơ sở dữ liệu trong môi trường sản xuất và công nghệ.",
+                "team.member6.position": "Kỹ sư Dữ liệu",
+                "team.member6.desc": "Kỹ sư dữ liệu có kinh nghiệm chuyên về kiến trúc data lakehouse và hệ thống streaming. Đã xây dựng nền tảng dữ liệu dựa trên Kubernetes với Trino, Kafka và Iceberg, đạt được những cải thiện hiệu suất đáng kể và giảm chi phí trong môi trường doanh nghiệp.",
                 "projects.title": "Dự án tiêu biểu",
                 "projects.subtitle": "Khám phá các dự án gần đây và xem cách chúng tôi giúp doanh nghiệp phát triển",
                 "projects.project1.title": "Hệ thống MES cho Nhà máy Hàng không Vũ trụ",
@@ -1186,14 +1430,14 @@
                 "contact.location": "Địa điểm:",
                 "contact.location.value": "Việt Nam (Trụ sở Hà Nội, có thể làm việc từ xa)",
                 "contact.languages": "Ngôn ngữ:",
-                "contact.languages.value": "Tiếng Anh thành thạo (C1–C2), Khả năng viết và giao tiếp học thuật",
+                "contact.languages.value": "Tiếng Anh thành thạo, Khả năng viết và giao tiếp học thuật",
                 "contact.tools": "Công cụ:",
-                "contact.tools.value": "GitHub, Jira, Slack, Zoom, Trello",
+                "contact.tools.value": "GitHub, Jira, OpenProject, Slack, Zoom, Trello",
                 "contact.timezone": "Múi giờ:",
                 "contact.timezone.value": "GMT+7, có thể làm việc trùng 4–6 giờ với châu Âu",
                 "contact.engagement": "Hình thức hợp tác:",
                 "contact.engagement.value": "Toàn thời gian hoặc theo dự án",
-                "contact.message": "Chúng tôi sẵn sàng thảo luận cách đội ngũ có thể hỗ trợ dự án của bạn. Liên hệ để đặt lịch hẹn hoặc yêu cầu thêm thông tin về năng lực của chúng tôi.",
+                "contact.message": "Chúng tôi sẵn sàng thảo luận cách đội ngũ có thể hỗ trợ dự án của bạn.<br>Liên hệ để đặt lịch hẹn hoặc yêu cầu thêm thông tin về năng lực của chúng tôi.",
                 "contact.cta": "Liên hệ ngay",
                 "footer.description": "Cung cấp giải pháp CNTT sáng tạo giúp doanh nghiệp phát triển trong kỷ nguyên số.",
                 "footer.services": "Dịch vụ",
@@ -1228,7 +1472,7 @@
                 elements.forEach(el => {
                     const key = el.getAttribute('data-i18n');
                     if (translations[lang][key]) {
-                        el.textContent = translations[lang][key];
+                        el.innerHTML = translations[lang][key];
                     }
                 });
                 
@@ -1281,6 +1525,32 @@
                 header.style.backgroundColor = 'rgba(15, 23, 42, 0.95)';
             } else {
                 header.style.backgroundColor = 'rgba(15, 23, 42, 0.9)';
+            }
+        });
+
+        // Team cards animation on scroll
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const teamObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const teamCards = entry.target.querySelectorAll('.team-card');
+                    teamCards.forEach(card => {
+                        card.classList.add('animate');
+                    });
+                    teamObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Start observing when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const teamSection = document.querySelector('.team');
+            if (teamSection) {
+                teamObserver.observe(teamSection);
             }
         });
     </script>
